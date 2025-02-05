@@ -6,7 +6,6 @@ const applyleave = async(req,res)=>{
     try {
         const {start_date , end_date ,employeeID,leaveReason} = req.body
         const employee = await EmployeeSchema.findById(employeeID);
-        console.log(employee);
         const leave = new LeaveSchema(
             {
                 start_date,
@@ -17,7 +16,7 @@ const applyleave = async(req,res)=>{
                 employee:employee._id
             }
         )
-        console.log(leave);
+   
         
         await leave.save();
         res.send("Leave request sent")

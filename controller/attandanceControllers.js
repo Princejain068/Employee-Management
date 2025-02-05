@@ -9,7 +9,6 @@ const markAttandance = async(req,res)=>{
         const formattedDate = date.format(today, 'YYYY-MM-DD');
         const attendance =await AttendanceSchema.findOne({employeeId:req.body.EmployeeID , date:formattedDate});
         if(!attendance){
-            console.log("aya tha");
             
             const newentry = new AttendanceSchema({
                 employeeId:req.body.EmployeeID,
@@ -30,7 +29,7 @@ const markAttandance = async(req,res)=>{
         await attendance.save();
         return res.send("check out succesful");
     } catch (error) {
-        console.log(error);
+        res.send(error.message)
     }
 }
 

@@ -1,39 +1,52 @@
 const EmployeeSchema = require('../models/Employee')
 const CompanySchema = require('../models/Company');
 const DepartmentSchema = require('../models/Department');
+const bcrypt = require('bcryptjs')
 
-const addEmployee = async (req,res) => {
+const addEmployee = async (req,res,next) => {
     try {
-        const {id} = req.params
+        if(!(req.user.Role === "HR" || req.user.Role === "Senior"))return res.send("You are not authorized to add an employee");
+        
         const {
             EmployeeID,
             Name,
             Gender,
             DateOfBirth,
-            Age,Email,Phone,Address,Department_id
+            Age,Email,Phone,Address,Department_id,Role
+            
         } =req.body;
-        console.log(Department_id);
         
-        const company =  await CompanySchema.findOne({Registration:id});
-        const department = await DepartmentSchema.findById(Department_id);
-        if(!department){
+        const company =  await CompanySchema.findById(req.user.Company);
+        
+        const password = `${Name}@${EmployeeID}`
+        
+        if(!Department_id){
             const employee = new EmployeeSchema({
                 EmployeeID,
                 Company:company._id,
                 Name,Gender,DateOfBirth,Age,Email,Phone,Address,
+                password,Role
             })
+        
+            
             await employee.save();
+    
+
             return res.send("Employee created")
         }
+
+        const department = await DepartmentSchema.findById(Department_id);
         const employee = new EmployeeSchema({
             EmployeeID,
             Company:company._id,
             Name,Gender,DateOfBirth,Age,Email,Phone,Address,
             Department : department._id,
-            Manager : department.ManagerId
+            Manager : department.ManagerId,
+            Role,password
         })
         
         await employee.save();
+
         return res.status(201).json({
             success:true,
             message:"Employee Created"

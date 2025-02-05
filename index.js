@@ -3,7 +3,7 @@ const {router}  = require('./Routes/indexRoute')
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
-const {dbConnect} = require('./apiHelper/dbconnection')
+const {dbConnect} = require('./Helpers/dbconnection')
 
 dbConnect();
 
