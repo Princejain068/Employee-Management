@@ -33,8 +33,6 @@ const markAttandance = async(req,res)=>{
     }
 }
 
-
-
 const fetechReport = async(req,res)=>{
     const {employeeId} =  req.params
     const {startDate,endDate} = req.query

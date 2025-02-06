@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs')
 const addEmployee = async (req,res,next) => {
     try {
         if(!(req.user.Role === "HR" || req.user.Role === "Senior"))return res.send("You are not authorized to add an employee");
-        
         const {
             EmployeeID,
             Name,
@@ -30,7 +29,7 @@ const addEmployee = async (req,res,next) => {
         
             
             await employee.save();
-    
+            
 
             return res.send("Employee created")
         }

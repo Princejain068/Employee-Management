@@ -79,11 +79,7 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  Leave_balance: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
+  
 });
 
 EmployeeSchema.pre("save", async function (next) {

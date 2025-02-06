@@ -330,9 +330,19 @@
     "/admin/get-all-company": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -340,60 +350,19 @@
     "/admin/get-all-employee": {
       "get": {
         "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/admin/addCompany": {
-      "post": {
-        "description": "",
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "Registration": {
-                  "example": "any"
-                },
-                "Name": {
-                  "example": "any"
-                },
-                "Description": {
-                  "example": "any"
-                },
-                "Email": {
-                  "example": "any"
-                },
-                "Phone": {
-                  "example": "any"
-                },
-                "Website": {
-                  "example": "any"
-                },
-                "Address": {
-                  "example": "any"
-                },
-                "Headquarters": {
-                  "example": "any"
-                },
-                "Founder": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
           },
-          "201": {
-            "description": "Created"
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -476,6 +445,54 @@
               "type": "object",
               "properties": {
                 "leave_id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/employee/updateleave": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Casual": {
+                  "example": "any"
+                },
+                "Sick": {
+                  "example": "any"
+                },
+                "Maternity": {
+                  "example": "any"
+                },
+                "Paternity": {
+                  "example": "any"
+                },
+                "Privilege": {
+                  "example": "any"
+                },
+                "Bereavement": {
+                  "example": "any"
+                },
+                "Compensatory": {
+                  "example": "any"
+                },
+                "Unpaid": {
+                  "example": "any"
+                },
+                "employeeId": {
                   "example": "any"
                 }
               }
