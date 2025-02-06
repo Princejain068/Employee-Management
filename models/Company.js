@@ -51,12 +51,13 @@ const CompanySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  CEO: {
+  Founder: {
     Name: {
       type: String,
       required: true,
     }
   }
 });
+
 
 module.exports = mongoose.model('Company', CompanySchema);

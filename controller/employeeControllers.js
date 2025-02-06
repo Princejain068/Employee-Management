@@ -69,10 +69,12 @@ const getAllEmployee = async (req,res)=>{
 }
 
 const getEmployees = async(req,res)=>{
-    const {id} = req.params
-    const company = await CompanySchema.findOne({Registration:id})
-    if(!company)return res.send("No such Company")
-    const employee = await EmployeeSchema.find({Company:company._id})
+    if(!req.user.Role==='HR')return res.send("Not allowed to fetch all employess");
+    const id = req.user.company;
+    const employee = await EmployeeSchema.find({Company:id})
+
+    
+    
     res.send(employee)
 }
 

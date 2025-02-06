@@ -1,9 +1,9 @@
 const bycrpt = require("bcryptjs")
 
-const validateEmployeeInput =(EmployeeID,password) =>{
+const validateEmployeeInput =(Email,password) =>{
 
     return(
-        EmployeeID && password
+        Email && password
     )
 
 }
