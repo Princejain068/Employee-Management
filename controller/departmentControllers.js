@@ -1,20 +1,26 @@
+const {ObjectId} = require('bson')
+
 const DepartmentSchema = require('../models/Department')
 const CompanySchema = require('../models/Company')
 
 const addDepartment = async(req,res)=>{
     try {
-        const {
-            departmentId,DepartmentName,Description,Email,Phone,ManagerId
-        }  = req.body;
-        const {id} = req.params
-        const company = await CompanySchema.findOne({Registration:id})
-        const Department =  new DepartmentSchema({
-            departmentId,DepartmentName,Company:company._id,
-            Description,ManagerId,Email,Phone,
-        })
-        await Department.save();
-        res.send("Departmetn Created")
-
+        if(req.user.Role==='Company Admin'){
+            const admin = req.user
+            const {
+                departmentId,DepartmentName,Description,Email,Phone,ManagerId
+            }  = req.body;
+            const id = admin.companyId;
+            const Manager = new ObjectId(ManagerId)
+            const Department =  new DepartmentSchema({
+                departmentId,DepartmentName,Company:id,
+                Description,ManagerId:Manager,Email,Phone,
+            })
+            await Department.save();
+            
+            return res.send("Departmetn Created")
+        }
+        return res.send("You are not authorized to add department");
     } 
     catch (error) {
         res.send(error.message)

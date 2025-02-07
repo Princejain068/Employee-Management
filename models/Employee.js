@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 
 const EmployeeSchema = new mongoose.Schema({
   EmployeeID: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

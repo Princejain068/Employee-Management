@@ -166,7 +166,7 @@
                 "Registration": {
                   "example": "any"
                 },
-                "Name": {
+                "CompanyName": {
                   "example": "any"
                 },
                 "Description": {
@@ -188,6 +188,24 @@
                   "example": "any"
                 },
                 "Founder": {
+                  "example": "any"
+                },
+                "AdminPhone": {
+                  "example": "any"
+                },
+                "AdminAddress": {
+                  "example": "any"
+                },
+                "AdminEmail": {
+                  "example": "any"
+                },
+                "AdminAge": {
+                  "example": "any"
+                },
+                "AdminDateOfBirth": {
+                  "example": "any"
+                },
+                "Gender": {
                   "example": "any"
                 }
               }
@@ -264,14 +282,13 @@
         }
       }
     },
-    "/company/department/{id}/add-department": {
+    "/company/department/add-department": {
       "post": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           },
           {
@@ -305,6 +322,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

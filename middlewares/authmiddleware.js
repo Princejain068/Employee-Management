@@ -41,6 +41,7 @@ const adminaccess = async(req,res,next)=>{
 
         const decoded = jwt.verify(access_token,JWT_SECRET_KEY) ;
         const user = await AdminSchema.findById(decoded.id)
+        if(!user)return res.send("You are not authorized to access this route");
         req.user = user;
         next();
     }
