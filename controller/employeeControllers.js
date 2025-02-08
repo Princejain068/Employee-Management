@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs')
 
 const addEmployee = async (req,res,next) => {
     try {
-        console.log(req.user);
         
         if(!(req.user.Role === "HR" || req.user.Role === "Admin"))return res.send("You are not authorized to add an employee");
         const {

@@ -62,15 +62,10 @@ const getAllCompany =async (req,res)=>{
 }
 
 const updateCompany = async(req,res)=>{
-    console.log(req.user);
     
     if(req.user.Role==='Company Admin' || req.user.Role==='Super Admin'){
         const admin  = req.user;
         const company =  await CompanySchema.findById(admin.companyId);
-        
-        console.log(company);
-        console.log(req.user);
-        
         
         for(key in req.body){
             if(req.body[key] && key!=='user')company[key]=req.body[key];
@@ -79,7 +74,6 @@ const updateCompany = async(req,res)=>{
         company.save();
         return res.send(company);
     }
-    console.log(req.user);
     
 }
 
