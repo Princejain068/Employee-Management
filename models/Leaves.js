@@ -24,6 +24,10 @@ const LeaveSchema = new mongoose.Schema({
     ref: "Employee",
     required: true,
     },
+    type:{
+        type:String,
+        required:true,
+    }
 }, { 
   timestamps: true 
 });

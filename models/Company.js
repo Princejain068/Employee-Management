@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const CompanySchema = new mongoose.Schema({
   Registration: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },

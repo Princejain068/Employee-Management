@@ -1,12 +1,12 @@
 const EmployeeSchema = require('../models/Employee')
 const CompanySchema = require('../models/Company');
 const DepartmentSchema = require('../models/Department');
-const bcrypt = require('bcryptjs')
+const AvailableLeaveSchema = require('../models/AvailableLeaves')
+const {ObjectId} = require('bson')
 
 const addEmployee = async (req,res,next) => {
     try {
-        
-        if(!(req.user.Role === "HR" || req.user.Role === "Admin"))return res.send("You are not authorized to add an employee");
+        if(!(req.user.Role === "HR" || req.user.Role === "Company Admin"))return res.send("You are not authorized to add an employee");
         const {
             EmployeeID,
             Name,
@@ -20,22 +20,11 @@ const addEmployee = async (req,res,next) => {
         
         const password = `${Name}@${EmployeeID}`
         
-        if(!Department_id){
-            const employee = new EmployeeSchema({
-                EmployeeID,
-                Company:company._id,
-                Name,Gender,DateOfBirth,Age,Email,Phone,Address,
-                password,Role
-            })
+        const departmentId = new ObjectId(Department_id);
+    
         
-            
-            await employee.save();
-            
 
-            return res.send("Employee created")
-        }
-
-        const department = await DepartmentSchema.findById(Department_id);
+        const department = await DepartmentSchema.findById(departmentId);
         const employee = new EmployeeSchema({
             EmployeeID,
             Company:company._id,
@@ -44,9 +33,18 @@ const addEmployee = async (req,res,next) => {
             Manager : department.ManagerId,
             Role,password
         })
-        
         await employee.save();
-
+        const leaves = new AvailableLeaveSchema({
+            Employee:employee._id,Casual:10,
+            Sick:10,
+            Maternity:10,
+            Paternity:10,
+            Privilege:10,
+            Bereavement:10,
+            Compensatory:10,
+            Unpaid:10,
+        })
+        await leaves.save();
         return res.status(201).json({
             success:true,
             message:"Employee Created"
@@ -59,33 +57,42 @@ const addEmployee = async (req,res,next) => {
 
 const getAllEmployee = async (req,res)=>{
     try {
+        const user = req.user;
+        if(user.Role==='Super Admin'){
         const employees = await EmployeeSchema.find();
         return res.status(200).json({
             employees
         })
+        }
+        return res.send("You are not a super admin")
     } catch (error) {
         return res.send("Kuch to gadbad hai")
     }
 }
 
 const getEmployees = async(req,res)=>{
-    if(!req.user.Role==='HR')return res.send("Not allowed to fetch all employess");
-    const id = req.user.company;
+    if(!req.user.Role==='HR' && !req.user.Role==='Company Admin')return res.send("Not allowed to fetch all employess");
+    const id = req.user.Company;
     const employee = await EmployeeSchema.find({Company:id})
-
-    
-    
-    res.send(employee)
+    return res.send(employee)
 }
 
 const updateEmployee = async (req,res)=>{
     try {
-        const employee = await EmployeeSchema.findOne({EmployeeID:req.body.EmployeeID})
-        const {department, Manager} = req.body
-        if(department) employee.Department = department
-        if(Manager) employee.Manager = Manager
-        await employee.save()
-        res.send("Employee updated")
+        if(req.user.Role ==='HR' || req.user.Role==='Company Admin'){
+            const employeeId = req.body.EmployeeID;
+            const employee = await EmployeeSchema.findOne({EmployeeID:employeeId , Company:req.user.Company});
+            if(!employee)return res.send("No such employee exist");
+
+            for(key in req.body){
+                if(req.body[key]){
+                    employee[key] = req.body[key];
+                }
+            }
+            await employee.save()
+            res.send("Employee updated")
+        }
+        return res.send("Not Authorozed to perform this action")
     } catch (error) {
         
     }
@@ -93,9 +100,18 @@ const updateEmployee = async (req,res)=>{
 
 const deleteEmployee = async(req,res)=>{
     try {
-        const employee  = await  EmployeeSchema.deleteOne({_id:req.body.id});
-        if(employee.deletedCount==0)res.send("No such Employee existed");
-        else res.send("Employee deleted")
+        if(req.user.Role ==='HR' || req.user.Role==='Company Admin'){
+            const employeeId = req.body.EmployeeID;
+            const employee  = await EmployeeSchema.findOne({EmployeeID:employeeId , Company:req.user.Company});
+            if(employee.Role==='Company Admin')return res.send("Not allowed to remove");
+            if(!employee)return res.send("No such employee exist");
+            const employee1  = await EmployeeSchema.findOneAndDelete({EmployeeID:employeeId , Company:req.user.Company});
+
+            if(employee1.deletedCount==0)res.send("No such Employee existed");
+            return  res.send("Employee deleted")
+        }
+        return res.send("Not Authorozed to perform this action")
+
     } catch (error) {
         res.send(error.message)
     }

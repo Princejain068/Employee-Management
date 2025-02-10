@@ -11,10 +11,14 @@ const addDepartment = async(req,res)=>{
                 departmentId,DepartmentName,Description,Email,Phone,ManagerId
             }  = req.body;
             const id = admin.companyId;
-            const Manager = new ObjectId(ManagerId)
+            // console.log(ManagerId);
+            
+            // const Manager = new ObjectId(ManagerId)
+            // console.log(Manager);
+
             const Department =  new DepartmentSchema({
                 departmentId,DepartmentName,Company:id,
-                Description,ManagerId:Manager,Email,Phone,
+                Description,ManagerId:admin._id,Email,Phone,
             })
             await Department.save();
             
