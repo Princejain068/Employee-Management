@@ -66,7 +66,7 @@ const getAllEmployee = async (req,res)=>{
         }
         return res.send("You are not a super admin")
     } catch (error) {
-        return res.send("Kuch to gadbad hai")
+        return res.send(error.message)
     }
 }
 

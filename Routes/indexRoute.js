@@ -16,7 +16,7 @@ router.use("/compnay",companyRoute)
 router.use("/company/department",adminaccess,departmentRoute)
 router.use("/admin",adminaccess,adminRoute)
 router.use("/employee",routeaccess,leavesRoute)
-router.use("/employee",attendanceRuoute)
+router.use("/employee",routeaccess,attendanceRuoute)
 router.use("/auth",auth)
 
 module.exports = {router}

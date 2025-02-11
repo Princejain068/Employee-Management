@@ -3,7 +3,7 @@ dotenv.config()
 const jwt =require("jsonwebtoken")
 const EmployeeSchema = require('../models/Employee');
 const AdminSchema = require('../models/Admin');
-const {istokenAvailable,getAccessTokenFromHeader} = require('../Helpers/tokens')
+const {getAccessTokenFromHeader} = require('../Helpers/tokens')
 
 const routeaccess = async(req,res,next)=>{
 

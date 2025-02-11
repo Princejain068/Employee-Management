@@ -26,7 +26,6 @@ const markAttandance = async(req,res,next)=>{
         const duration = (checkOutTime - attendance.checkIn) / (1000 * 60 * 60); 
         attendance.workHours = Math.round(duration * 100) / 100;
 
-        // we have to write custom logic hehehehehehehehehe.................
         attendance.status = 'Present';
         await attendance.save();
         return res.send("check out succesful");

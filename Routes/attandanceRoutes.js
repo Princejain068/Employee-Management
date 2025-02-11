@@ -5,8 +5,8 @@ const { routeaccess, adminaccess } = require('../middlewares/authmiddleware');
 const router = express.Router();
 
 
-router.post('/attendance',routeaccess,markAttandance)
-router.get('/attendance/report',routeaccess,fetechReport)
+router.post('/attendance',markAttandance)
+router.get('/attendance/report',fetechReport)
 
 
 module.exports = router
