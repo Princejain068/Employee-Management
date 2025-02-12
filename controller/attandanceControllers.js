@@ -2,6 +2,21 @@ const date = require('date-and-time');
 const AttendanceSchema =require('../models/Attandence')
 const EmployeeSchema =require('../models/Employee')
 
+const cron = require('node-cron');
+
+const task =cron.schedule('59 23 * * *', async () => {
+    const today = new Date()
+    const formattedDate = date.format(today, 'YYYY-MM-DD');
+    today.setHours(17, 0, 0, 0); 
+    
+    const attendance =await AttendanceSchema.updateMany({date:formattedDate,status:'Partial'},{$set:{
+        status:'Auto Logout',
+        checkOut : today,
+        workHours : 4
+    }});
+    
+});
+task.start();
 
 const markAttandance = async(req,res,next)=>{
     try {
@@ -15,7 +30,7 @@ const markAttandance = async(req,res,next)=>{
                 employeeId:user._id,
                 date:formattedDate,
                 checkIn:new Date(),
-                status:'Present'
+                status:'Partial'
             })
             await newentry.save();
             return res.send("check-In successfull")
@@ -25,8 +40,11 @@ const markAttandance = async(req,res,next)=>{
         attendance.checkOut = checkOutTime
         const duration = (checkOutTime - attendance.checkIn) / (1000 * 60 * 60); 
         attendance.workHours = Math.round(duration * 100) / 100;
-
+        if(workHours>=8)
         attendance.status = 'Present';
+        else if(workHours>=4 )
+        attendance.status = 'Half';
+        
         await attendance.save();
         return res.send("check out succesful");
     } catch (error) {
