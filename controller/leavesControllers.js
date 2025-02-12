@@ -10,10 +10,13 @@ const applyleave = async(req,res)=>{
         const {start_date , end_date ,leaveReason,typeOfLeave} = req.body
         const employee = await EmployeeSchema.findById(user._id);
         const AvailableLeave = await AvailableLeaveSchema.findOne({Employee:user._id});
+        console.log("Here");
         
         if(AvailableLeave[typeOfLeave]> start_date-end_date){
             return res.send("You don't have suuficient leaves to apply")
         }
+        console.log("Here");
+        
         const leave = new LeaveSchema(
             {
                 start_date,
