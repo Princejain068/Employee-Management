@@ -10,6 +10,7 @@ const adminRoute = require("./adminRoutes")
 const leavesRoute = require("./leavesRoutes")
 const attendanceRuoute = require("./attandanceRoutes")
 const auth = require("./auth")
+const asset = require("./assetRoutes")
 
 router.use("/company/employee",routeaccess,employeeRoute)
 router.use("/compnay",companyRoute)
@@ -18,5 +19,6 @@ router.use("/admin",adminaccess,adminRoute)
 router.use("/employee",routeaccess,leavesRoute)
 router.use("/employee",routeaccess,attendanceRuoute)
 router.use("/auth",auth)
+router.use("/asset",routeaccess,asset)
 
 module.exports = {router}
